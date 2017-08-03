@@ -36,9 +36,9 @@ class CNN(object):
         return self.forwardFC(FCInputs)
         
     def forwardFC(self, inputs):
-        z2 = np.dot(inputs, self.W1)
-        a2 = self.sigmoid(z2)
-        z3 = np.dot(a2, self.W2)
+        self.z2 = np.dot(inputs, self.W1)
+        self.a2 = self.sigmoid(z2)
+        self..z3 = np.dot(a2, self.W2)
         yHat = self.sigmoid(z3)
         return yHat
 
@@ -49,10 +49,20 @@ class CNN(object):
         return np.exp(-z)/((a+np.exp(-z))**2)
 
     def costFunction(self, images, y):
-        yHat = forwardImages(images)
+        yHat = self.forwardImages(images)
         J = 0.5 * sum((y - self.yHat)**2)
+
+    def costFunctonPrime(self, images, y):
+        yHat = self.forwardImages(images)
+
+        # dJdW2
+        delta3 = np.multiply(-(y-self.yHat), self.sigmoidPrime(self.z3))
+        dJdW2 = np.dot(self.a2.T, delta3)
+
+        #dJdW1
+        delta2 = np.dot(delta3, self.W2.T) * self.sigmoidPrime(self.z2)
+        dJdW1 = np.dot(X.T, delta2)
         
-    
     def convolveImage(self, image):
         img = image
         for i in range(0, len(self.filterDefs)):
